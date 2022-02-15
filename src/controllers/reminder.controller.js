@@ -22,8 +22,8 @@ exports.addReminder = async (req, res, next) => {
 
 exports.fetchReminders = async (req, res, next) => {
   try {
-    const { id } = req.query;
-     const getAll = await Reminder.find({ _id: id });
+    const { query_user } = req.query;
+     const getAll = await Reminder.find({ user: query_user });
     return res.status(200).json({
       getAll,
     });
