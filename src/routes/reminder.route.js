@@ -6,14 +6,14 @@ const router = express.Router();
 
 router.post("/newReminder", Reminder.addReminder);
 
-router.get("/viewReminder", Reminder.fetchReminders);
+router.get("/viewReminder", Reminder.fetchAllReminder);
 
-router.get("/getSingleReminder", Reminder.fetchById);
+router.get("/getSingleReminder", Reminder.fetchAReminder);
 
-router.delete("/removeReminder/:_id", Reminder.deleteById);
+router.delete("/removeReminder/:_id", Reminder.deleteAReminder);
 
-router.patch("/updateSingleReminder/:_id", Reminder.updateOne);
+router.patch("/updateSingleReminder/:_id", Reminder.updateAReminder);
 
-router.put("/updateAllReminder/:_id", Reminder.updateMore);
+router.put("/updateAllReminder/:_id", Reminder.updateMoreReminder);
 
 module.exports = router;

@@ -8,8 +8,7 @@ exports.addReminder = async (req, res, next) => {
         message: "Please fill in the required fields",
       });
     }
-    const new_reminder = new Reminder({ user, description });
-    await new_reminder.save();
+    const new_reminder = await Reminder.create({ user, description });
     return res.status(201).json({
       new_reminder,
     });
@@ -20,10 +19,10 @@ exports.addReminder = async (req, res, next) => {
   }
 };
 
-exports.fetchReminders = async (req, res, next) => {
+exports.fetchAllReminder = async (req, res, next) => {
   try {
     const { query_user } = req.query;
-     const getAll = await Reminder.find({ user: query_user });
+    const getAll = await Reminder.find({ user: query_user });
     return res.status(200).json({
       getAll,
     });
@@ -34,10 +33,10 @@ exports.fetchReminders = async (req, res, next) => {
   }
 };
 
-exports.fetchById = async (req, res, next) => {
+exports.fetchAReminder = async (req, res, next) => {
   try {
-    const { _id } = req.query;
-    const getOne = await Reminder.findOne({ _id: _id });
+    const { des } = req.query;
+    const getOne = await Reminder.findOne({ description: des });
     if (!getOne) {
       return res.status(404).json({
         message: "ID not found",
@@ -53,11 +52,11 @@ exports.fetchById = async (req, res, next) => {
   }
 };
 
-exports.deleteById = async (req, res, next) => {
+exports.deleteAReminder = async (req, res, next) => {
   try {
     const { _id } = req.params;
     const deleteOne = await Reminder.findByIdAndDelete({ _id: _id });
-    if (deleteOne) {
+    if (!deleteOne) {
       return res.status(405).json({
         message: "does not allow deleting or modifying",
       });
@@ -72,11 +71,13 @@ exports.deleteById = async (req, res, next) => {
   }
 };
 
-exports.updateOne = async (req, res, next) => {
+exports.updateAReminder = async (req, res, next) => {
   try {
     const { _id } = req.params;
-    const updateOne = await Reminder.findOneAndUpdate({ _id: _id });
-    if (updateOne) {
+    const updateOne = await Reminder.findByIdAndUpdate({ _id: _id }, req.body, {
+      new: true,
+    });
+    if (!updateOne) {
       return res.status(405).json({
         message: "does not allow deleting or modifying",
       });
@@ -91,11 +92,11 @@ exports.updateOne = async (req, res, next) => {
   }
 };
 
-exports.updateMore = async (req, res, next) => {
+exports.updateMoreReminder = async (req, res, next) => {
   try {
     const { _id } = req.params;
     const updateAll = await Reminder.findByIdAndUpdate({ _id: _id });
-    if (updateAll) {
+    if (!updateAll) {
       return res.status(405).json({
         message: "does not allow deleting or modifying",
       });
